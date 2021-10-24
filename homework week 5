@@ -1,1 +1,25 @@
 
+  noStroke();
+  fill(#B46868);
+  rect(50,50,70,40);
+  fill(#68B492);
+    rect(50,100,70,40);
+    fill(#6886B4);
+  rect(50,150,70,40);
+  if(mousePressed){
+    fill(c);
+    circle(mouseX,mouseY,10);
+  }
+}
+
+void mouseClicked(){
+  if(mouseX>50&&mouseY>50&&mouseX<120&&mouseY<90){
+    c=color(#B46868);
+  }
+  if(mouseX>50&&mouseY>100&&mouseX<120&&mouseY<140){
+    c=color(#68B492);
+  }
+  if(mouseX>50&&mouseY>150&&mouseX<120&&mouseY<190){
+    c=color(#6886B4);
+  }
+}
