@@ -1,0 +1,48 @@
+size(450, 450);
+colorMode(HSB, 100, 1, 1, 1);
+background(#8ECBA6); 
+
+
+
+String txt = "life is like a movie. ";
+
+float ww = 0;
+float z=random(0,255);
+for (int i = 0; i < txt.length(); i++) {
+
+  char c = txt.charAt(i);
+  textSize(floor(random(55, 100)));
+  int cl = int(c);
+  println(cl);
+  fill(cl, 10, 10, 0.5);
+  noStroke();
+  ellipse(ww, 150, 50, 50); 
+  ww += textWidth(c);
+  
+  fill(cl,z,random(0,255),10);
+  noStroke();
+  ellipse(350,ww,80,40);
+  ww += textWidth(c);
+  
+  
+}
+String txtb="we should treat them in a positive way.";
+
+float vv=0;
+float r=random(0,255);
+for(int i =0;i<txtb.length();i++){
+  char b=txtb.charAt(i);
+  textSize(floor(random(45,80)));
+  int bl =int(b);
+  println(bl);
+  fill(bl,2,36,0.5);
+  noStroke();
+  rect(vv,160,40,60);
+  vv +=textWidth(b);
+  
+  fill(bl,r,39,5);
+  noStroke();
+  rect(200,vv,25,60);
+  vv +=textWidth(b);
+  
+}
