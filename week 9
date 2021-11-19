@@ -1,0 +1,86 @@
+float tz=0;
+color[] pal = { #FF8003,   
+                #FEF9E6,   
+                #FCB875,   
+                #1F82AD,   
+                #010200,   
+                #B96549};  
+
+void setup() {
+  size(500, 500);
+  noStroke();
+  colorMode(HSB,360,100,100);
+  noiseDetail(3,0.5);
+
+}
+
+
+color get_right_color(float winkel){ //0-360)
+  float sect = winkel/60.;
+  int Sect1 = floor(sect);
+  float tune = sect-Sect1;
+  int Sect2 = Sect1+1;
+  if (Sect1 >= 6) Sect1 = Sect1-6;
+  if (Sect2 >= 6) Sect2 = Sect2-6;
+  colorMode(RGB);
+  float red1 = (1-tune)*red(pal[Sect1])+tune*red(pal[Sect2]);
+  float green1 = (1-tune)*green(pal[Sect1])+tune*green(pal[Sect2]);
+  float blue1 = (1-tune)*blue(pal[Sect1])+tune*blue(pal[Sect2]);
+  color output = color(red1,green1,blue1);
+  colorMode(HSB);
+  return output;
+}
+
+
+class tile{
+  PVector position;
+  float diameter;
+  color[] eckpunkte = new color[5]; // cloclwise from top left
+  int resolution = 10;
+  PImage minipic;
+  float my_tx, my_ty, my_tz;
+  
+  tile(float _x, float _y, float _diameter, float _tx, float _ty, float _tz){
+          my_tx = _tx;
+          my_ty = _ty;
+          my_tz = _tz;          
+          position = new PVector(_x, _y);
+          diameter = _diameter;    
+          minipic = createImage(250,250, RGB);
+
+  }
+
+  void create_minipic(){
+    for (int i = 0 ; i < minipic.height ; i++) {  
+      // println(i);
+      for (int j = 0 ; j < minipic.width ; j++) {
+        float v0 = noise((j/500.+my_tx)*.5, (i/500.+my_ty)*.5, my_tz+50)*60; // erzeugt noise im Bereich zwischen 0 und 60
+        float v1 = noise((j/500.+my_tx)*5, (i/500.+my_ty)*5, my_tz)*60; // erzeugt noise im Bereich zwischen 0 und 60
+        float v2 = noise((j/500.+my_tx)*5, (i/500.+my_ty)*5, my_tz+20)*60; // erzeugt noise im Bereich zwischen 0 und 60
+        float w = 360*(v1/1.5 - floor(v1/1.5)); // Schraube mit 0-60 umdrehungen
+        PVector omega = new PVector(1,0);
+        float help = radians(1.5*w);
+        omega.rotate(help);
+        float shift = (omega.x)*20;
+        float base_hue = map(.3*v2+.9*v0,0,60,-60,420); //v2 setzt andere datenbasis voraus
+        minipic.pixels[j+minipic.width*i] = get_right_color((360+3*base_hue+shift)%360);
+      }
+    }
+    smooth();
+    image(minipic,position.x,position.y,500,500);
+  }
+    
+}
+
+void mousePressed(){
+  for (int i=0; i<6;i ++) pal[i] = color(random(255), random(255), random(255));
+}
+
+void draw() { 
+    background(0);
+    float tx = mouseX/100.;
+    float ty = mouseY/100.;
+    tile tester = new tile(0, 0, 50, tx, ty, tz);
+    tester.create_minipic();
+    tz += 0.01;
+}
